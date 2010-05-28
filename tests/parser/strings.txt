@@ -1,0 +1,35 @@
+NOTICE AUTH :*** Looking up your hostname
+NOTICE AUTH :*** Checking Ident
+:wineasy2.se.quakenet.org 433 * BC^joker :Nickname is already in use.
+NOTICE AUTH :*** Found your hostname
+PING :4191304146
+NOTICE AUTH :*** No ident response
+:wineasy2.se.quakenet.org 001 BC^j0k3r :Welcome to the QuakeNet IRC Network, BC^j0k3r
+:wineasy2.se.quakenet.org 002 BC^j0k3r :Your host is wineasy2.se.quakenet.org, running version u2.10.12.10+snircd(1.3.4a)
+:wineasy2.se.quakenet.org 003 BC^j0k3r :This server was created Thu Mar 20 2008 at 17:51:05 CET
+:wineasy2.se.quakenet.org 004 BC^j0k3r wineasy2.se.quakenet.org u2.10.12.10+snircd(1.3.4a) dioswkgxRXInP biklmnopstvrDcCNuMT bklov
+:wineasy2.se.quakenet.org 005 BC^j0k3r WHOX WALLCHOPS WALLVOICES USERIP CPRIVMSG CNOTICE SILENCE=15 MODES=6 MAXCHANNELS=20 MAXBANS=45 NICKLEN=15 :are supported by this server
+:wineasy2.se.quakenet.org 005 BC^j0k3r MAXNICKLEN=15 TOPICLEN=250 AWAYLEN=160 KICKLEN=250 CHANNELLEN=200 MAXCHANNELLEN=200 CHANTYPES=#& PREFIX=(ov)@+ STATUSMSG=@+ CHANMODES=b,k,l,imnpstrDducCNMT CASEMAPPING=rfc1459 NETWORK=QuakeNet :are supported by this server
+:wineasy2.se.quakenet.org 251 BC^j0k3r :There are 46 users and 124376 invisible on 41 servers
+:wineasy2.se.quakenet.org 252 BC^j0k3r 79 :operator(s) online
+:wineasy2.se.quakenet.org 253 BC^j0k3r 37 :unknown connection(s)
+:wineasy2.se.quakenet.org 254 BC^j0k3r 90456 :channels formed
+:wineasy2.se.quakenet.org 255 BC^j0k3r :I have 10089 clients and 1 servers
+:wineasy2.se.quakenet.org NOTICE BC^j0k3r :Highest connection count: 15628 (15627 clients)
+:wineasy2.se.quakenet.org 375 BC^j0k3r :- wineasy2.se.quakenet.org Message of the Day -
+:wineasy2.se.quakenet.org NOTICE BC^j0k3r :on 2 ca 1(4) ft 20(20) tr
+:wineasy2.se.quakenet.org 221 BC^j0k3r +i
+:BC^j0k3r!~joker@89-235-203-125.saturn.infonet.ee MODE BC^j0k3r +i
+:BC^j0k3r!~joker@89-235-203-125.saturn.infonet.ee JOIN #bctest
+:wineasy2.se.quakenet.org 353 BC^j0k3r = #bctest :@BC^j0k3r
+:wineasy2.se.quakenet.org 366 BC^j0k3r #bctest :End of /NAMES list.
+:BC^j0k3r!~joker@89-235-203-125.saturn.infonet.ee JOIN #blackcrystal
+:wineasy2.se.quakenet.org 332 BC^j0k3r #blackcrystal :╙Ёр ЄютрЁш∙ш! ☻┬хёэр!☻ | ▼www.blackcrystal.net▼
+:wineasy2.se.quakenet.org 333 BC^j0k3r #blackcrystal Q 1241537125
+:wineasy2.se.quakenet.org 353 BC^j0k3r = #blackcrystal :BC^j0k3r @Krichek @BC^miami @Q @BC^] @KoD|Conn_17 @mt_CTAPOCTA @KoD|foRe` @SHPONGIk @BC^joker
+:wineasy2.se.quakenet.org 366 BC^j0k3r #blackcrystal :End of /NAMES list.
+:Q!TheQBot@CServe.quakenet.org NOTICE BC^j0k3r :[#blackcrystal] ♥7-☻♥9д♥7☻- ♥13welcome to Blackcrystal international Multigaming Clan (☻Q3 OSP tdm, Q2 tdm☻) since 12.05.1999 ♥7-☻♥9д♥7☻-♥13 http://www.blackcrystal.net ♥7-☻♥9д♥7☻-☼☼☼☼☼☼
+:BC^joker!joker@85.14.235.80.sta.estpak.ee MODE #blackcrystal +lov 100 BC^j0k3r BC^j0k3r
+:BC^joker!joker@85.14.235.80.sta.estpak.ee MODE #blackcrystal +l 100500
+:BC^miami!~miami@89.235.203.125 PRIVMSG #blackcrystal :эє чфрЁют ъюы№ эх °єЄш°№
+:BC^miami!~miami@89.235.203.125 PRIVMSG BC^j0k3r :їрщ
