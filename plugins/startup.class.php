@@ -14,38 +14,47 @@
  * so, without it your bot will only stay connected to server for some time.
  *
  * What we have here:
- *   - Accept CONNECTED signal, set first NICK from nicklist, send USER and PASS commands
- *   - If nick is already used, set another NICK from nicklist
+ *   - Accept CONNECTED signal, set first nick from $joker->menicks, send USER and PASS commands
+ *   - If nick is already used, set another nick from $joker->menicks
  *   - Skip MOTD and joins channels
  *   - Reply to server PING requests
  */
 
 class Startup {
 
-  public  $nicks    = array('BC^joker','BC^j0k3r','BC^jo'); //place here bot's nicknames
-  public  $channels = array('#blackcrystal');                     //place here channels to join
-  
-
+  /**
+   * This event will fire when your bot connected to IRC
+   * @param Joker $joker
+   */
   public function CONNECTED(Joker $joker) 
   {
-    // This event will come after bot has made connection
-    // @see joker.class.php -> connect() method
-    $this->nicks[] = $nick = array_shift($this->nicks); //get first nick and rotate nick list
-    $joker->nick($nick); //send selected nickname
+    // get nick and rotate nick list    
+    $joker->nick();
     $joker->user();      //send default username @see joker.class.php -> method user
     $joker->pass();      //send default password @see joker.class.php -> method pass
   }
-  
-  public function ERR_NICKNAMEINUSE(Joker $joker) 
+
+  /**
+   * Catch bot's nick change
+   * @param Joker $joker
+   */
+  public function NICK(Joker $joker)
+  {
+    if ($joker->nick == $joker->me)
+            $joker->me = $joker->text;
+  }
+
+ public function ERR_NICKNAMEINUSE(Joker $joker) 
   {
     // nick is already in use, try another one
-    $this->nicks[] = $newnick = array_shift($this->nicks); //get nick and rotate list
-    $joker->nick($newnick);  //send selected nickname
+    // @see joker.php to setup available nicks
+    $joker->altnicks[] = $nick = array_shift($joker->altnicks);
+    $joker->nick($nick); 
   }
   
   public function RPL_MOTDSTART(Joker $joker)
   {
-    // skip motd displaying
+    // skip motd
     $this->loglevel = $joker->loglevel;
     $joker->loglevel = false;
   }
@@ -56,7 +65,7 @@ class Startup {
     $joker->loglevel = $this->loglevel;
      
     // Join channels after MOTD ends
-    foreach ($this->channels as $chan) 
+    foreach ($joker->autojoin as $chan)
     {
       $joker->join($chan);
     }
