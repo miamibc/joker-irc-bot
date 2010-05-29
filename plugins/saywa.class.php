@@ -17,9 +17,9 @@ class SayWa {
   
   public function PRIVMSG(Joker $joker) {
 
-    if (strtolower($joker->chan) == '#blackcrystal'
-            && stripos($joker->text, 'joker') !== FALSE )
-              $joker->msg($joker->chan, $joker->nick.', a?');
+    if (strtolower($joker->chan) == '#blackcrystal' && stripos($joker->text, 'joker') !== FALSE )
+              $joker->answer( $joker->nick.', a?' );
     
   }
+  
 }
