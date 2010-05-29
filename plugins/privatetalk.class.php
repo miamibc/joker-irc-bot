@@ -35,7 +35,7 @@ class PrivateTalk {
     if (!isset($this->infos[$joker->nick])) 
     {
       //first time you talk to Joker, it replies Hi, nickname...
-      $joker->msg($joker->nick,"Hi, $joker->nick. Nice to meet you! Type something again...");
+      $joker->answer("Hi, $joker->nick. Nice to meet you! Type something again...");
       $this->infos[$joker->nick] = array('time'=>time(),'text'=>$joker->text);
     }
     else 
@@ -43,7 +43,7 @@ class PrivateTalk {
       //if info exists, msg him about last chat
       $info = $this->infos[$joker->nick];
       $seconds = time() - $info['time'];
-      $joker->msg($joker->nick,"$seconds seconds ago you told me: $info[text]");
+      $joker->answer("$seconds seconds ago you told me: $info[text]");
       
       //remember text, that was sayed
       $this->infos[$joker->nick] = array('time'=>time(),'text'=>$joker->text);        
