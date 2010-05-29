@@ -17,28 +17,33 @@
  *   - Start the bot
  */
 
-include 'joker.class.php';
 
 // Initialize bot
+
+include 'joker.class.php';
 
 $joker = new Joker();
 
 // Change some parameters
 
-$joker->loglevel = true; //true level :D to see all types of messages
+$joker->me       = 'BC^joker';
+$joker->altnicks = array( 'BC^j0k3r', 'BC^jo' ); // used by Startup plugin to set nick
+$joker->autojoin = array( '#blackcrystal' );     // used by Startup plugin to join channels
+$joker->admins   = array( 'BC^miami' );          // used by admin plugin
+$joker->loglevel = true;                         // true level :D see all messages
 
 // Activate required plugins
 
-$joker->load('Startup');         // Startup sequence
-$joker->load('Admin');           // Simple administration
+$joker->load('startup');                         // Startup sequence
+$joker->load('admin');                           // Simple administration
 
 // Activate exsample plugins
 
-// $joker->load('HelloWorld');   // Hello world application
-// $joker->load('PrivateTalk');  // Private talk
-// $joker->load('TimerExample'); // Timer usage example
-// $joker->load('Temp');         // Google weather
+// $joker->load('HelloWorld');                   // Hello world application
+// $joker->load('PrivateTalk');                  // Private talk
+// $joker->load('TimerExample');                 // Timer usage example
+// $joker->load('Temp');                         // Google weather
 
 // Start the bot
 
-$joker->connect('irc.quakenet.org',6667);
+$joker->connect( 'irc.quakenet.org', 6667 );
