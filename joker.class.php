@@ -27,7 +27,13 @@ class Joker {
   public $buffer  = array();       // hold outgoing buffer
   public $flood   = null;          // hold antiflood timer
 
-  public $me,$server,$port,
+  public $me       = null;
+  public $altnicks = array();
+  public $autojoin = array();
+  public $adminss  = array();
+
+
+  public $server,$port,
          $event,$addr,$nick,$user, // event  information
          $host,$chan,$raw,$param;  // event  information
 
@@ -80,7 +86,9 @@ class Joker {
    */
   public function load($name)
   {
-    $filename = dirname(__FILE__) . "/plugins/" . strtolower($name) . ".class.php";
+
+    $name = strtolower($name);
+    $filename = dirname(__FILE__) . "/plugins/$name.class.php";
     if (!file_exists($filename))
     {
       $this->log('p', "$filename is not exists");
@@ -106,11 +114,13 @@ class Joker {
    * Unload plugin
    * @param string $name 
    */
-  public function unload( $name)
+  public function unload($name)
   {
+    $name = strtolower($name);
     unset($this->plugins[$name]);
     $this->log('p', "$name unloaded");
     return "$name unloaded";
+    
   }
   
   /**
@@ -273,7 +283,7 @@ class Joker {
     return 'NUMBER_'.$numeric;
   }
 
-  /**
+ /**
    * Connect command
    * @param string $server
    * @param string $port
@@ -331,7 +341,12 @@ class Joker {
    * Nick command
    * @param string $nick
    */
-  public function nick($nick='BC^joker') { $this->me = $nick; $this->queue("NICK $nick"); }   
+  public function nick($nick=null)
+  {
+    if (is_null($nick)) $nick = $this->me;
+    $this->queue("NICK $nick");
+    // @see startup plugin, where nick changing catches
+  }
 
   /**
    * User command
@@ -365,26 +380,50 @@ class Joker {
    * @param string $target
    * @param string $msg
    */
-  public function msg($target,$msg) { $this->queue("PRIVMSG $target :$msg"); } 
+  public function msg($target,$msg)
+  {
+    $msg = implode(' ',array_slice(func_get_args(), 1));
+    $this->queue("PRIVMSG $target :$msg");
+  }
+
+  /**
+   * Shortcut to give quick answer to somebody (channel or nick)
+   * @param string $msg
+   */
+  public function answer($msg)
+  {
+    $msg = implode(' ',func_get_args());
+    $target = $this->chan ? $this->chan : $this->nick;
+    $this->msg($target, $msg);
+  }
+
 
   /**
    * NOTICE command
    * @param string $target
    * @param string $msg
    */
-  public function notice($target,$msg) { $this->queue("NOTICE $target :$msg"); } 
+  public function notice($target,$msg) 
+  {
+    $msg = implode(' ',array_slice(func_get_args(), 1));
+    $this->queue("NOTICE $target :$msg");
+  }
 
   /**
    * CHANLIST command
-   * @param string $params
+   * @param string $target
    */
-  public function chanlist($params='') { $this->queue(trim("LIST $params")); } 
+  public function chanlist($target='') { $this->queue("LIST $target"); }
 
   /**
    * QUIT command
    * @param string $message
    */
-  public function quit($message='buj :p') { $this->queue("QUIT :$message"); } 
+  public function quit($msg='buj :p')
+  {
+    $msg = implode(' ', func_get_args() );
+    $this->queue("QUIT :$msg");
+  }
 
   /**
    * WHO command
@@ -396,7 +435,7 @@ class Joker {
    * MODE command
    * @param string $params
    */
-  public function mode($params) { $this->queue("MODE $params"); } 
+  public function mode($params) { $this->queue("MODE ". implode(' ',func_get_args())); }
 
   /**
    * OP is alias for MODE command
@@ -431,7 +470,11 @@ class Joker {
    * @param string $channel
    * @param string $topic
    */
-  public function topic($channel, $topic) { $this->queue("TOPIC $channel :$topic"); } 
+  public function topic($channel, $topic) 
+  {
+    $topic = implode(' ',array_slice(func_get_args(), 1));
+    $this->queue("TOPIC $channel :$topic");
+  }
 
   /**
    * INVITE command
@@ -446,21 +489,33 @@ class Joker {
    * @param string $nick
    * @param string $comment
    */
-  public function kick($channel, $nick, $comment = 'Sorry d0g :p') { $this->queue("KICK $channel $nick :$comment"); }
+  public function kick($channel, $nick, $comment = 'Sorry d0g :p')
+  {
+    $comment = implode(' ',array_slice(func_get_args(), 3));
+    $this->queue("KICK $channel $nick :$comment");
+  }
 
   /**
    * CTCP command
    * @param string $target
    * @param string $msg
    */
-  public function ctcp($target, $msg) { $this->msg($target, "\001$msg\001"); } 
+  public function ctcp($target, $msg)
+  {
+    $msg = implode(' ',array_slice(func_get_args(), 1));
+    $this->msg($target, "\001$msg\001");
+  }
 
   /**
    * ACTION command
    * @param string $target
    * @param string $msg
    */
-  public function action($target, $msg) { $this->ctcp($target,'ACTION '.$msg); } 
+  public function action($target, $msg)
+  {
+    $msg = implode(' ',array_slice(func_get_args(), 1));
+    $this->ctcp($target,'ACTION '.$msg);
+  }
 
   /**
    * YO command, an easter egg
