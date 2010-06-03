@@ -139,7 +139,7 @@ class Joker {
   	    $this->parse(); //parse raw
       }
       if ($this->event) $this->event();                          //run event if exisis
-      if (count($this->buffer)>0 && microtime(1) > $this->flood) // check flood protection and message in buffer
+      if (count($this->buffer)>0 && time() > $this->flood) // check flood protection and message in buffer
               $this->send(array_shift($this->buffer));           //send from buffer
       $this->event('TIMER');                                     //process timer
       usleep(100);
@@ -181,7 +181,7 @@ class Joker {
   {
     $this->log('o', $raw);
     fwrite($this->socket, "$raw\r\n"); //send command
-    $this->flood = microtime(1)+1;     //set antiflood timer to current time+ 1
+    $this->flood = time()+1;     //set antiflood timer to current time+ 1
   }
 
   /**
@@ -383,7 +383,11 @@ class Joker {
   public function msg($target,$msg)
   {
     $msg = implode(' ',array_slice(func_get_args(), 1));
-    $this->queue("PRIVMSG $target :$msg");
+    $msg = wordwrap($msg, 430, "\n", true);
+    foreach (explode("\n", $msg) as $item)
+    {
+      $this->queue("PRIVMSG $target :$item");
+    }
   }
 
   /**
@@ -406,7 +410,11 @@ class Joker {
   public function notice($target,$msg) 
   {
     $msg = implode(' ',array_slice(func_get_args(), 1));
-    $this->queue("NOTICE $target :$msg");
+    $msg = wordwrap($msg, 430, "\n", true);
+    foreach (explode("\n", $msg) as $item)
+    {
+      $this->queue("NOTICE $target :$item");
+    }
   }
 
   /**
@@ -503,7 +511,11 @@ class Joker {
   public function ctcp($target, $msg)
   {
     $msg = implode(' ',array_slice(func_get_args(), 1));
-    $this->msg($target, "\001$msg\001");
+    $msg = wordwrap($msg, 430, "\n", true);
+    foreach (explode("\n", $msg) as $item)
+    {
+      $this->msg($target, "\001$item\001");
+    }
   }
 
   /**
