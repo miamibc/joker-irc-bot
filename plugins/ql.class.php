@@ -24,7 +24,7 @@ class Ql {
 
     $hash = $joker->param;
     
-    list($cmd,$nick,$opt)  = $joker->param; // three parameters accepted
+    @list($cmd,$nick,$opt)  = $joker->param; // three parameters accepted
 
     if ($cmd != '!ql') return; // first must be !ql
 

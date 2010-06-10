@@ -106,7 +106,7 @@ class Joker {
     $file = preg_replace("@class\s+(\w+)@i", "class {$rev}", $file,1);
     $this->log('p', "Loading $name as $rev from $filename");
     eval('?>'.$file );
-    $this->plugins[$name] = new $rev();
+    $this->plugins[$name] = new $rev($this);
     return "$name loaded from $filename as $rev";
   }
 
@@ -305,7 +305,7 @@ class Joker {
     
     //this option allows our bot to process timers and other 
     //stuff while waiting for commands
-    stream_set_blocking($this->socket,0);  
+    stream_set_blocking($this->socket,0);
     
     //run event CONNECTED
     $this->event('CONNECTED');

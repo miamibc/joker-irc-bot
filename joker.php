@@ -28,7 +28,7 @@ $joker = new Joker();
 
 $joker->me       = 'BC^joker';
 $joker->altnicks = array( 'BC^j0k3r', 'BC^jo' ); // used by Startup plugin to set nick
-$joker->autojoin = array( '#blackcrystal' );     // used by Startup plugin to join channels
+$joker->autojoin = array( '#blackcrystal', '#kill.or.die' );     // used by Startup plugin to join channels
 $joker->admins   = array( 'BC^miami' );          // used by admin plugin
 $joker->loglevel = true;                         // true level :D see all messages
 
@@ -36,13 +36,15 @@ $joker->loglevel = true;                         // true level :D see all messag
 
 $joker->load('startup');                         // Startup sequence
 $joker->load('admin');                           // Simple administration
-
+$joker->load('seen');
 // Activate exsample plugins
 
 // $joker->load('HelloWorld');                   // Hello world application
 // $joker->load('PrivateTalk');                  // Private talk
 // $joker->load('TimerExample');                 // Timer usage example
-// $joker->load('Temp');                         // Google weather
+$joker->load('temp');                         // Google weather
+$joker->load('ql');                           // QuakeLive
+$joker->load('saywa');                        // SayWa
 
 // Start the bot
 

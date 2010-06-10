@@ -4,7 +4,7 @@
  * @package    Joker
  * @subpackage Plugins
  * @author     Miami <miami@blackcrystal.net>
- * @version    1.0 on 26/05/2010
+ * @version    1.1 on 03/06/2010
  * @license    Released under the MIT License
  * @link       www.blackcrystal.net
  * 
@@ -41,7 +41,7 @@ class Temp {
     else
     {
 
-    $url = 'http://www.google.com/ig/api?hl=ru&weather=' . $cityraw ;
+    $url = 'http://www.google.com/ig/api?hl=en&weather=' . $cityraw ;
     $joker->log('p',"Getting $url");
     $file = file_get_contents($url);
 
@@ -60,8 +60,7 @@ class Temp {
     
     }
 
-    $to = ($joker->chan) ? $joker->chan : $joker->nick;
-    $joker->msg($to, $text);
+    $joker->answer( $text );
 
   }
 

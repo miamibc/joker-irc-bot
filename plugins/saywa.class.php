@@ -12,14 +12,14 @@
  *
  * No description available (yet)
  */
-
 class SayWa {
-  
-  public function PRIVMSG(Joker $joker) {
 
-    if (strtolower($joker->chan) == '#blackcrystal' && stripos($joker->text, 'joker') !== FALSE )
-              $joker->answer( $joker->nick.', a?' );
-    
+  public function PRIVMSG(Joker $joker)
+  {
+
+    if (strtolower($joker->chan) == '#blackcrystal' && stripos($joker->text, 'joker') !== FALSE)
+      $joker->answer($joker->nick . ', a?');
   }
-  
+
 }
+
