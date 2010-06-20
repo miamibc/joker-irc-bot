@@ -16,9 +16,9 @@
  */
 
 class Joker {
-  
+
   // Log level: false - no output, true - full output, array(..) - selected types:
-  // 'e' - events, 'p' - parser, 'i' - incoming, 
+  // 'e' - events, 'p' - parser, 'i' - incoming,
   // 'o' - outgoing, '+' - information, 'p' - plugin
   public $loglevel = array('i','o');
 
@@ -57,7 +57,7 @@ class Joker {
     {
       // skip, if plugin is removed by another plugin
       if (!isset($this->plugins[$pluginName])) continue;
-      
+
       // run method on plugin
       $eventName = $this->event;
       if (method_exists($instance,$this->event))
@@ -65,7 +65,7 @@ class Joker {
         $result = $instance->$eventName($this);
         // stop processing on special signal
         if ($result === self::STOP) break;
-      }      
+      }
     }
     $this->clearEvent();
   }
@@ -73,16 +73,16 @@ class Joker {
   /**
    * Clear current event and all related info
    */
-  public function clearEvent() 
+  public function clearEvent()
   {
-  	$this->addr  = $this->nick  = $this->user  = $this->host  = 
+  	$this->addr  = $this->nick  = $this->user  = $this->host  =
   	$this->chan  = $this->event = $this->text = $this->raw  = '';
   	$this->param = array();
   }
 
   /**
    * Load plugin
-   * @param string $name 
+   * @param string $name
    */
   public function load($name)
   {
@@ -112,7 +112,7 @@ class Joker {
 
   /**
    * Unload plugin
-   * @param string $name 
+   * @param string $name
    */
   public function unload($name)
   {
@@ -120,9 +120,9 @@ class Joker {
     unset($this->plugins[$name]);
     $this->log('p', "$name unloaded");
     return "$name unloaded";
-    
+
   }
-  
+
   /**
    * Main loop
    */
@@ -131,11 +131,11 @@ class Joker {
     // this is infinitive loop, that reads incoming
     // messages, sends outgoing and runs timers
     while (!feof($this->socket))
-    { 
+    {
       $this->clearEvent(); //clear event
       $this->raw = trim(fgets($this->socket, 2048));             //read incoming raw
       if ($this->raw != '') {
-        $this->log('i', $this->raw); 
+        $this->log('i', $this->raw);
   	    $this->parse(); //parse raw
       }
       if ($this->event) $this->event();                          //run event if exisis
@@ -165,7 +165,7 @@ class Joker {
    * it will be sent to server using antiflood system
    * @param string $raw
    */
-  public function queue($raw) 
+  public function queue($raw)
   {
     $this->buffer[] = $raw;
   }
@@ -189,21 +189,21 @@ class Joker {
    */
   private function parse()
   {
-    
+
     $matches = array();
-    
+
   	// :nick!user@host PRIVMSG #chan :text
   	if (    preg_match('/^:(\S*) (\S*) (#\S*) :(.*)$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->event,$this->chan, $this->text) = $matches;
-  	 
+
   	// :nick!user@host PRIVMSG #chan :\001ACTION text\001
   	if (    preg_match('/^:(\S*) PRIVMSG (#\S*) :\001(ACTION) (.*)\001$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->chan, $this->event, $this->text) = $matches;
-  	
+
   	// :nick!user@host JOIN #chan
   	elseif (preg_match('/^:(\S*) (\S*) (#\S*)$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->event,$this->chan) = $matches;
-  	 
+
   	// :server 376 BC^j0k3r :End of /MOTD command.
   	elseif (preg_match('/^:(\S*) (\S*) \S* :(.*)$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->event,$this->text) = $matches;
@@ -211,11 +211,11 @@ class Joker {
   	// :server 254 me 88735 :channels formed
   	elseif (preg_match('/^:(\S*) (\S*) \S* (\S* :.*)$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->event,$this->text) = $matches;
-  		
+
   	// :wserver 433 * newnick :Nickname is already in use.
   	elseif (preg_match('/^:(\S*) (\S*) \* \S* :(.*)$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->event,$this->text) = $matches;
-  		
+
   	// :server 366 me #bctest :End of /NAMES list.
   	elseif (preg_match('/^:(\S*) (\S*) \S* (#\S*) :(.*)$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->event,$this->chan, $this->text) = $matches;
@@ -223,7 +223,7 @@ class Joker {
   	// :nick!user@host NICK :newnick
   	elseif (preg_match('/^:(\S*) (\S*) :(.*)$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->event, $this->text) = $matches;
-  	  	
+
   	// PING :text
   	elseif (preg_match('/^([^:]*) :(.*)$/Ui',$this->raw,$matches))
   	list(,$this->event,$this->text) = $matches;
@@ -231,13 +231,13 @@ class Joker {
   	// :server 005 me WHOX WALLCH....
   	elseif (preg_match('/^:(\S*) (\S*) \S* (.*)$/Ui',$this->raw,$matches))
   	list(,$this->addr,$this->event,$this->text) = $matches;
-  	 
+
   	else {
   	  //else output a message and stop processing
   	  $this->log('e',"No matches for '$this->raw'");
   	  return;
   	}
-  	
+
   	$this->event = $this->eventName($this->event); //convert numeric event to string
   	@list($this->nick,$this->user,$this->host) = @explode('@',str_replace('!','@',$this->addr)); //get nick|user|host from addr
   	$this->text  = trim($this->text); //trim text
@@ -293,23 +293,23 @@ class Joker {
     //disconnect if connected
     if ($this->socket) $this->disconnect();
     $this->log('+','Connecting '.$this->server.'...');
-    
+
     //change server|port variables, if given in parameters, otherwise use old
     if (!is_null($server)) $this->server = $server;
     if (!is_null($port)) $this->$port = $port;
-    
+
     //connect
     $erno = $errstr = 0;
     $this->socket = fsockopen($server, $port, $erno, $errstr, 30);
     if(!$this->socket) die("Could not connect $erno $errstr");
-    
-    //this option allows our bot to process timers and other 
+
+    //this option allows our bot to process timers and other
     //stuff while waiting for commands
     stream_set_blocking($this->socket,0);
-    
+
     //run event CONNECTED
     $this->event('CONNECTED');
-    
+
     //start main loop
     $this->main();
 
@@ -321,7 +321,7 @@ class Joker {
     @see plugins/startup.class.php if you really interested in startup sequence
     @see plugins/helloworld.class.php if you want something easy
     */
-    
+
   }
 
   /**
@@ -355,25 +355,25 @@ class Joker {
    * @param string $servername
    * @param string $realname
    */
-  public function user($username='joker', $hostname='joker', $servername='blackcrystal.net', $realname='BC^joker the IRC bot') { $this->queue("USER $username $hostname $servername :$realname"); } 
+  public function user($username='joker', $hostname='joker', $servername='blackcrystal.net', $realname='BC^joker the IRC bot') { $this->queue("USER $username $hostname $servername :$realname"); }
 
   /**
    * PASS command
    * @param string $password
    */
-  public function pass($password='NOPASS') { $this->queue("PASS $password"); } 
+  public function pass($password='NOPASS') { $this->queue("PASS $password"); }
 
   /**
    * JOIN command
    * @param string $chan
    */
-  public function join($chan) { $this->queue("JOIN $chan") ; } 
+  public function join($chan) { $this->queue("JOIN $chan") ; }
 
   /**
    * PART command
    * @param string $chan
    */
-  public function part($chan) { $this->queue("PART $chan") ; } 
+  public function part($chan) { $this->queue("PART $chan") ; }
 
   /**
    * MSG command
@@ -407,7 +407,7 @@ class Joker {
    * @param string $target
    * @param string $msg
    */
-  public function notice($target,$msg) 
+  public function notice($target,$msg)
   {
     $msg = implode(' ',array_slice(func_get_args(), 1));
     $msg = wordwrap($msg, 430, "\n", true);
@@ -437,7 +437,7 @@ class Joker {
    * WHO command
    * @param string $params
    */
-  public function who($params) { $this->queue("WHO $params"); } 
+  public function who($params) { $this->queue("WHO $params"); }
 
   /**
    * MODE command
@@ -478,7 +478,7 @@ class Joker {
    * @param string $channel
    * @param string $topic
    */
-  public function topic($channel, $topic) 
+  public function topic($channel, $topic)
   {
     $topic = implode(' ',array_slice(func_get_args(), 1));
     $this->queue("TOPIC $channel :$topic");
@@ -489,7 +489,7 @@ class Joker {
    * @param string $nick
    * @param string $channel
    */
-  public function invite($nick, $channel) { $this->queue("INVITE $nick $channel"); } 
+  public function invite($nick, $channel) { $this->queue("INVITE $nick $channel"); }
 
   /**
    * KICK command
@@ -535,5 +535,5 @@ class Joker {
    * @param string $nick
    */
   public function yo($chan,$nick) { $this->action($chan, 'sets mode: +yo '.$nick); }
-  
+
 }

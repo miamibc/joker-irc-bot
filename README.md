@@ -9,6 +9,7 @@ from network.
 
 Installation instructions and other documentation
 -------------------------------------------------
+
 * http://wiki.github.com/miamibc/joker-irc-bot
 
 Project pages
