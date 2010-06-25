@@ -109,16 +109,20 @@ class Seen {
     $addr   = $this->db->escapeString($addr);
     $result = $this->db->query("SELECT COUNT(1) FROM seen WHERE a LIKE '%{$addr}%'");
     $count =  array_shift( $result->fetchArray() );
-    $result = $this->db->query("SELECT * FROM seen WHERE a LIKE '%{$addr}%' ORDER BY d ASC LIMIT 10");
+    $result = $this->db->query("SELECT * FROM seen WHERE a LIKE '%{$addr}%' ORDER BY d DESC LIMIT 10");
 
     // array for all found nicks
     $nicks = array();
 
-    while ($row = $result->fetchArray()) {
-      list($lastnick, $lastaddr) = split('!',$row['a'],2 );
-      $lastmsg  = $row['m'];
-      $lastdate = $this->ago($row['d']);
-      $nicks[] = $lastnick;
+    while ($row = $result->fetchArray()) {      
+      if (!isset($lastnick)) {
+        list($lastnick, $lastaddr) = split('!',$row['a'],2 );
+        $lastmsg  = $row['m'];
+        $lastdate = $this->ago($row['d']);
+      }
+      else {
+        $nicks[] = array_shift( split('!',$row['a'],2 ) );
+      }
     }
 
     switch ($count) {
@@ -127,8 +131,7 @@ class Seen {
       case 1:  // one nick, good
         return "!seen: I've seen $lastnick ({$lastaddr}) $lastdate ago $lastmsg.";
       default: // many nicks
-        array_pop($nicks); // remove last nick, we already have it in last*
-        return "!seen: {$count} matches found. Last seen $lastnick ({$lastaddr}) $lastdate ago $lastmsg. Also matched: ".implode(' ', $nicks);
+        return "!seen: {$count} matches found. Last seen $lastnick ({$lastaddr}) $lastdate ago $lastmsg. Also matched: ".implode(' ', array_unique( $nicks ));
     }
 
   }
